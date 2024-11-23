@@ -1,13 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using SensorApis.Data; 
+using SensorApis.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-// Add services to the container.
+// Add services to the container
 builder.Services.AddControllers();
 
-// Register the DbContext with PostgreSQL
+// Register DbContext with PostgreSQL
 builder.Services.AddDbContext<SensorDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -17,9 +16,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
-
-// Configure the HTTP request pipeline.
+// Configure HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

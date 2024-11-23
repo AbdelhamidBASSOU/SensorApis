@@ -1,6 +1,6 @@
 @SensorApis_HostAddress = http://localhost:5030
 
-GET {{SensorApis_HostAddress}}/weatherforecast/
+GET {{SensorApis_HostAddress}}/Sensor/
 Accept: application/json
 
 ###

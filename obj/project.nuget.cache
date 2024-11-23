@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1oBomq86X5U=",
+  "dgSpecHash": "9sLQiRKMCFA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\abdel\\source\\repos\\SensorApis\\SensorApis.csproj",
+  "projectFilePath": "C:\\Users\\abdel\\SensorApis\\SensorApis.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\abdel\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\abdel\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

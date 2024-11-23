@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SensorApis.Data;  // Add the namespace for your DbContext
-using SensorApis.Models;  // Assuming you have a Sensor model
+using SensorApis.Data;  // Namespace for DbContext
+using SensorApis.Models;  
 
 namespace SensorApis.Controllers
 {
@@ -11,7 +11,6 @@ namespace SensorApis.Controllers
     {
         private readonly SensorDbContext _context;
 
-        // Constructor that injects the SensorDbContext
         public SensorController(SensorDbContext context)
         {
             _context = context;
@@ -21,7 +20,6 @@ namespace SensorApis.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Sensor>>> GetSensors()
         {
-            // Return a list of all sensors from the database
             return await _context.Sensors.ToListAsync();
         }
 
@@ -32,9 +30,8 @@ namespace SensorApis.Controllers
             var sensor = await _context.Sensors.FindAsync(id);
             if (sensor == null)
             {
-                return NotFound();  // Return a 404 if the sensor is not found
+                return NotFound();  // 404 if not found
             }
-
             return sensor;
         }
 
@@ -42,10 +39,9 @@ namespace SensorApis.Controllers
         [HttpPost]
         public async Task<ActionResult<Sensor>> PostSensor(Sensor sensor)
         {
-            _context.Sensors.Add(sensor);  // Add the new sensor to the database
-            await _context.SaveChangesAsync();  // Save changes to the database
+            _context.Sensors.Add(sensor);
+            await _context.SaveChangesAsync();
 
-            // Return the created resource (status code 201) with the location of the new sensor
             return CreatedAtAction(nameof(GetSensor), new { id = sensor.Id }, sensor);
         }
 
@@ -55,13 +51,28 @@ namespace SensorApis.Controllers
         {
             if (id != sensor.Id)
             {
-                return BadRequest();  // Return a 400 if the ID in the URL doesn't match the sensor object
+                return BadRequest("ID mismatch");  // 400 if ID doesn't match
             }
 
-            _context.Entry(sensor).State = EntityState.Modified;  // Mark the sensor as modified
-            await _context.SaveChangesAsync();  // Save the changes
+            _context.Entry(sensor).State = EntityState.Modified;    
 
-            return NoContent();  // Return a 204 status code indicating the request was successful but has no content
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Sensors.Any(e => e.Id == id))
+                {
+                    return NotFound();  // 404 if ID not found
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();  // 204 No Content
         }
 
         // DELETE api/Sensor/5
@@ -71,13 +82,13 @@ namespace SensorApis.Controllers
             var sensor = await _context.Sensors.FindAsync(id);
             if (sensor == null)
             {
-                return NotFound();  // Return a 404 if the sensor was not found
+                return NotFound();  // 404 Not Found
             }
 
-            _context.Sensors.Remove(sensor);  // Remove the sensor from the database
-            await _context.SaveChangesAsync();  // Save changes to the database
+            _context.Sensors.Remove(sensor);
+            await _context.SaveChangesAsync();
 
-            return NoContent();  // Return a 204 status code indicating the deletion was successful
+            return NoContent();  // 204 No Content
         }
     }
 }
