@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\abdel\\SensorApis\\SensorApis.csproj": {}
+    "C:\\Users\\abdel\\Sensor\\SensorApis\\SensorApis.csproj": {}
   },
   "projects": {
-    "C:\\Users\\abdel\\SensorApis\\SensorApis.csproj": {
+    "C:\\Users\\abdel\\Sensor\\SensorApis\\SensorApis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\abdel\\SensorApis\\SensorApis.csproj",
+        "projectUniqueName": "C:\\Users\\abdel\\Sensor\\SensorApis\\SensorApis.csproj",
         "projectName": "SensorApis",
-        "projectPath": "C:\\Users\\abdel\\SensorApis\\SensorApis.csproj",
+        "projectPath": "C:\\Users\\abdel\\Sensor\\SensorApis\\SensorApis.csproj",
         "packagesPath": "C:\\Users\\abdel\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\abdel\\SensorApis\\obj\\",
+        "outputPath": "C:\\Users\\abdel\\Sensor\\SensorApis\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

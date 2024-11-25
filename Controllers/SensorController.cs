@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SensorApis.Data;  // Namespace for DbContext
+using SensorApis.Data;
 using SensorApis.Models;
-
 
 namespace SensorApis.Controllers
 {
@@ -21,7 +20,8 @@ namespace SensorApis.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Sensor>>> GetSensors()
         {
-            return await _context.Sensors.ToListAsync();
+            var sensors = await _context.Sensors.ToListAsync();
+            return Ok(new { Message = "Sensors retrieved successfully", Data = sensors });
         }
 
         // GET api/Sensor/5
@@ -31,9 +31,9 @@ namespace SensorApis.Controllers
             var sensor = await _context.Sensors.FindAsync(id);
             if (sensor == null)
             {
-                return NotFound();  // 404 if not found
+                return NotFound(new { Message = "Sensor not found" });  // 404 if not found
             }
-            return sensor;
+            return Ok(new { Message = "Sensor retrieved successfully", Data = sensor });
         }
 
         // POST api/Sensor
@@ -43,7 +43,7 @@ namespace SensorApis.Controllers
             _context.Sensors.Add(sensor);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetSensor), new { id = sensor.Id }, sensor);
+            return CreatedAtAction(nameof(GetSensor), new { id = sensor.Id }, new { Message = "Sensor created successfully", Data = sensor });
         }
 
         // PUT api/Sensor/5
@@ -52,10 +52,17 @@ namespace SensorApis.Controllers
         {
             if (id != sensor.Id)
             {
-                return BadRequest("ID mismatch");  // 400 if ID doesn't match
+                return BadRequest(new { Message = "ID mismatch" });  // 400 if ID doesn't match
             }
 
-            _context.Entry(sensor).State = EntityState.Modified;
+            var existingSensor = await _context.Sensors.FindAsync(id);
+            if (existingSensor == null)
+            {
+                return NotFound(new { Message = "Sensor not found" });  // 404 if not found
+            }
+
+            _context.Entry(existingSensor).State = EntityState.Detached;  // Detach existing entity
+            _context.Entry(sensor).State = EntityState.Modified;  // Attach the updated entity
 
             try
             {
@@ -65,7 +72,7 @@ namespace SensorApis.Controllers
             {
                 if (!_context.Sensors.Any(e => e.Id == id))
                 {
-                    return NotFound();  // 404 if ID not found
+                    return NotFound(new { Message = "Sensor not found during concurrency check" });  // 404 if ID not found
                 }
                 else
                 {
@@ -73,7 +80,7 @@ namespace SensorApis.Controllers
                 }
             }
 
-            return NoContent();  // 204 No Content
+            return Ok(new { Message = "Sensor updated successfully" });  // 204 No Content
         }
 
         // DELETE api/Sensor/5
@@ -83,13 +90,13 @@ namespace SensorApis.Controllers
             var sensor = await _context.Sensors.FindAsync(id);
             if (sensor == null)
             {
-                return NotFound();  // 404 Not Found
+                return NotFound(new { Message = "Sensor not found" });  // 404 Not Found
             }
 
             _context.Sensors.Remove(sensor);
             await _context.SaveChangesAsync();
 
-            return NoContent();  // 204 No Content
+            return Ok(new { Message = "Sensor deleted successfully" });  // 204 No Content
         }
     }
 }
