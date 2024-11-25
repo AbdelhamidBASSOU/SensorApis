@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SensorApis.Data;  // Namespace for DbContext
-using SensorApis.Models;  
+using SensorApis.Models;
+
 
 namespace SensorApis.Controllers
 {
@@ -54,7 +55,7 @@ namespace SensorApis.Controllers
                 return BadRequest("ID mismatch");  // 400 if ID doesn't match
             }
 
-            _context.Entry(sensor).State = EntityState.Modified;    
+            _context.Entry(sensor).State = EntityState.Modified;
 
             try
             {
