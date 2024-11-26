@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using SensorApis.Middleware;  // Import the namespace for the custom middleware
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,9 @@ builder.Services.AddLogging();
 
 var app = builder.Build();
 
+// Register the custom ExceptionMiddleware to the pipeline
+app.UseMiddleware<ExceptionMiddleware>();
+
 // Configure middleware order
 if (app.Environment.IsDevelopment())
 {
@@ -83,6 +87,7 @@ if (app.Environment.IsDevelopment())
     {
         // Specify Swagger JSON endpoints for versions 1 and 2
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sensor APIs V1");
+        c.SwaggerEndpoint("/swagger/v2/swagger.json", "Sensor APIs V2");
         c.RoutePrefix = ""; // Set Swagger at the root URL
     });
 }
