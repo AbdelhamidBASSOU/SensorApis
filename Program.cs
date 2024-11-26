@@ -7,7 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddControllers();
-
+// Add Services for In_MeromtyCache
+builder.Services.AddMemoryCache();
+/*builder.Services
+    .AddApiVersioning(
+           options => { 
+                options.ReportApiVersions = true; options.AssumeDefaultVersionWhenUnspecified = true; options.DefaultApiVersion = new ApiVersion(1, 0); });
+*/
 // Add CORS policy
 builder.Services.AddCors(options =>
 {

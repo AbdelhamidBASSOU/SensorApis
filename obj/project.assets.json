@@ -3683,6 +3683,7 @@
       "Microsoft.EntityFrameworkCore.Design >= 9.0.0",
       "Microsoft.EntityFrameworkCore.InMemory >= 9.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.0",
+      "Microsoft.Extensions.Caching.Memory >= 9.0.0",
       "Microsoft.IdentityModel.Logging >= 8.2.1",
       "Moq >= 4.20.72",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 9.0.1",
@@ -3765,6 +3766,10 @@
           "Microsoft.EntityFrameworkCore.Tools": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "suppressParent": "All",
+            "target": "Package",
+            "version": "[9.0.0, )"
+          },
+          "Microsoft.Extensions.Caching.Memory": {
             "target": "Package",
             "version": "[9.0.0, )"
           },
