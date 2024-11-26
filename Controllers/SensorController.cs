@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 
 namespace SensorApis.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class SensorController : ControllerBase
     {
@@ -22,9 +24,9 @@ namespace SensorApis.Controllers
             _cache = cache;
         }
 
-        // GET: api/Sensor
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Sensor>>> GetSensors()
+        // v1.0: GET api/v1/Sensor
+        [HttpGet, MapToApiVersion("1.0")]
+        public async Task<ActionResult<IEnumerable<Sensor>>> GetSensorsV1()
         {
             if (!_cache.TryGetValue("sensors", out List<Sensor>? sensors))
             {
@@ -40,9 +42,23 @@ namespace SensorApis.Controllers
             return Ok(new { Message = "Sensors retrieved successfully", Data = sensors });
         }
 
-        // GET api/Sensor/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Sensor>> GetSensor(int id)
+        // v2.0: GET api/v2/Sensor
+        [HttpGet, MapToApiVersion("2.0")]
+        public async Task<ActionResult<IEnumerable<Sensor>>> GetSensorsV2()
+        {
+            var sensors = await _context.Sensors.ToListAsync();
+
+            return Ok(new
+            {
+                Message = "Sensors retrieved successfully",
+                TotalCount = sensors.Count,
+                Data = sensors
+            });
+        }
+
+        // v1.0: GET api/v1/Sensor/5
+        [HttpGet("{id}"), MapToApiVersion("1.0")]
+        public async Task<ActionResult<Sensor>> GetSensorV1(int id)
         {
             if (!_cache.TryGetValue($"sensor_{id}", out Sensor? sensor))
             {
@@ -62,7 +78,25 @@ namespace SensorApis.Controllers
             return Ok(new { Message = "Sensor retrieved successfully", Data = sensor });
         }
 
-        // POST api/Sensor
+        // v2.0: GET api/v2/Sensor/5
+        [HttpGet("{id}"), MapToApiVersion("2.0")]
+        public async Task<ActionResult<Sensor>> GetSensorV2(int id)
+        {
+            var sensor = await _context.Sensors.FindAsync(id);
+            if (sensor == null)
+            {
+                return NotFound(new { Message = "Sensor not found", SensorId = id });
+            }
+
+            return Ok(new
+            {
+                Message = "Sensor retrieved successfully",
+                Data = sensor,
+                Timestamp = DateTime.UtcNow
+            });
+        }
+
+        // Shared: POST api/Sensor
         [HttpPost]
         public async Task<ActionResult<Sensor>> PostSensor(Sensor sensor)
         {
@@ -70,10 +104,10 @@ namespace SensorApis.Controllers
             await _context.SaveChangesAsync();
             _cache.Remove("sensors");
 
-            return CreatedAtAction(nameof(GetSensor), new { id = sensor.Id }, new { Message = "Sensor created successfully", Data = sensor });
+            return CreatedAtAction(nameof(GetSensorV1), new { id = sensor.Id }, new { Message = "Sensor created successfully", Data = sensor });
         }
 
-        // PUT api/Sensor/5
+        // Shared: PUT api/Sensor/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSensor(int id, Sensor sensor)
         {
@@ -113,7 +147,7 @@ namespace SensorApis.Controllers
             return Ok(new { Message = "Sensor updated successfully" });
         }
 
-        // DELETE api/Sensor/5
+        // Shared: DELETE api/Sensor/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSensor(int id)
         {
