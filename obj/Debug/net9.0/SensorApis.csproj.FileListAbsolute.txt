@@ -278,3 +278,4 @@ C:\Users\abdel\Sensor\SensorApis\obj\Debug\net9.0\refint\SensorApis.dll
 C:\Users\abdel\Sensor\SensorApis\obj\Debug\net9.0\SensorApis.pdb
 C:\Users\abdel\Sensor\SensorApis\obj\Debug\net9.0\SensorApis.genruntimeconfig.cache
 C:\Users\abdel\Sensor\SensorApis\obj\Debug\net9.0\ref\SensorApis.dll
+C:\Users\abdel\Sensor\SensorApis\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll
