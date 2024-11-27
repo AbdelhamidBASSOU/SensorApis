@@ -52,31 +52,3 @@ Usage: Used to temporarily store sensor data for quick retrieval and reduce data
 Description: Moq is a popular .NET library for creating mock objects in unit tests.
 
 Usage: Used in unit tests to mock dependencies and isolate the code being tested.
-
-Project Features
-1. Versioned APIs
-Description: Supports multiple API versions to provide backward compatibility.
-
-Usage: Implemented using ApiVersioning to handle version-specific routes and functionalities.
-
-2. User Authentication and Authorization
-Description: Secure user management using Microsoft Identity.
-
-Usage: Allows users to register, login, and manage their profiles securely.
-
-3. Sensor Data Management
-Description: CRUD operations for sensor data.
-
-Usage: APIs to create, read, update, and delete sensor data, with caching for improved performance.
-
-4. Interactive Documentation
-Description: Interactive API documentation using Swagger.
-
-Usage: Provides a user-friendly interface for exploring and testing the APIs.
-
-Summary
-The Sensor APIs project leverages ASP.NETCore and a range of complementary technologies to deliver a scalable,
-maintainable, and user-friendly API solution. By integrating robust logging, caching, and versioning mechanisms, 
-the project ensures high performance and reliability. 
-The use of Swagger for documentation and Moq for testing further enhances the development and maintenance process, 
-making it easier for developers to collaborate and extend the application.
