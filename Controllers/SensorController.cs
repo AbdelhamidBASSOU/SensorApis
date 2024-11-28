@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using SensorApis.Data;
 using SensorApis.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace SensorApis.Controllers
                 _cache.Set("sensors", sensors, cacheEntryOptions);
             }
 
-            return Ok(new { Message = "Sensors retrieved successfully", Data = sensors });
+            return Ok(new { Message = "Sensors retrieved successfully v1", Data = sensors });
         }
 
         // v2.0: GET api/v2/Sensor
@@ -50,7 +51,7 @@ namespace SensorApis.Controllers
 
             return Ok(new
             {
-                Message = "Sensors retrieved successfully",
+                Message = "Sensors retrieved successfully v2",
                 TotalCount = sensors.Count,
                 Data = sensors
             });
@@ -65,7 +66,7 @@ namespace SensorApis.Controllers
                 var sensorFromDb = await _context.Sensors.FindAsync(id);
                 if (sensorFromDb == null)
                 {
-                    return NotFound(new { Message = "Sensor not found" });
+                    return NotFound(new ErrorResponse("Sensor not found", "The sensor with the specified ID was not found", ""));
                 }
                 sensor = sensorFromDb;
 
@@ -75,7 +76,7 @@ namespace SensorApis.Controllers
                 _cache.Set($"sensor_{id}", sensor, cacheEntryOptions);
             }
 
-            return Ok(new { Message = "Sensor retrieved successfully", Data = sensor });
+            return Ok(new { Message = "Sensor retrieved successfully v1", Data = sensor });
         }
 
         // v2.0: GET api/v2/Sensor/5
@@ -85,12 +86,12 @@ namespace SensorApis.Controllers
             var sensor = await _context.Sensors.FindAsync(id);
             if (sensor == null)
             {
-                return NotFound(new { Message = "Sensor not found", SensorId = id });
+                return NotFound(new ErrorResponse("Sensor not found", "The sensor with the specified ID was not found", ""));
             }
 
             return Ok(new
             {
-                Message = "Sensor retrieved successfully",
+                Message = "Sensor retrieved successfully v2",
                 Data = sensor,
                 Timestamp = DateTime.UtcNow
             });
@@ -113,13 +114,13 @@ namespace SensorApis.Controllers
         {
             if (id != sensor.Id)
             {
-                return BadRequest(new { Message = "ID mismatch" });
+                return BadRequest(new ErrorResponse("ID mismatch", "The provided ID does not match the ID of the sensor to update", ""));
             }
 
             var existingSensor = await _context.Sensors.FindAsync(id);
             if (existingSensor == null)
             {
-                return NotFound(new { Message = "Sensor not found" });
+                return NotFound(new ErrorResponse("Sensor not found", "No sensor found with the provided ID", ""));
             }
 
             _context.Entry(existingSensor).State = EntityState.Detached;
@@ -133,7 +134,7 @@ namespace SensorApis.Controllers
             {
                 if (!_context.Sensors.Any(e => e.Id == id))
                 {
-                    return NotFound(new { Message = "Sensor not found during concurrency check" });
+                    return NotFound(new ErrorResponse("Sensor not found during concurrency check", "No sensor found with the provided ID", ""));
                 }
                 else
                 {
@@ -154,7 +155,7 @@ namespace SensorApis.Controllers
             var sensor = await _context.Sensors.FindAsync(id);
             if (sensor == null)
             {
-                return NotFound(new { Message = "Sensor not found" });
+                return NotFound(new ErrorResponse("Sensor not found", "The sensor with the specified ID was not found", ""));
             }
 
             _context.Sensors.Remove(sensor);

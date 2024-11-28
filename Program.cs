@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Versioning;
-using SensorApis.Middleware;  // Import the namespace for the custom middleware
+using SensorApis.Middleware;  
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,11 +60,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 
     // Add Swagger documentation for version 2
-    c.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo
+    /*c.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo
     {
         Title = "Sensor APIs",
         Version = "v2"
-    });
+    });*/
 
     // Resolve conflicting actions for versioning (ensure no conflicts in API paths)
     c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
@@ -87,8 +87,8 @@ if (app.Environment.IsDevelopment())
     {
         // Specify Swagger JSON endpoints for versions 1 and 2
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sensor APIs V1");
-        c.SwaggerEndpoint("/swagger/v2/swagger.json", "Sensor APIs V2");
-        c.RoutePrefix = ""; // Set Swagger at the root URL
+/*        c.SwaggerEndpoint("/swagger/v2/swagger.json", "Sensor APIs V2");
+*/        c.RoutePrefix = ""; // Set Swagger at the root URL
     });
 }
 
